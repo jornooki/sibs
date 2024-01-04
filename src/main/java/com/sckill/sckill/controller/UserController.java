@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> excluirFuncionalidade(@PathVariable(value = "id") Long id) throws Exception {
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) throws Exception {
         userService.delete(id);
 
         return ResponseEntity.ok().build();
