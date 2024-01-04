@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IdInvalidoException("ID inválido: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new IdInvalidoException("ID invalid: " + id));
 
     }
 
@@ -37,7 +37,7 @@ public class UserService {
                     .email(dto.getEmail());
         } else {
             User user = userRepository.findById(dto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID " + dto.getId()));
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with ID " + dto.getId()));
             builder = user.toBuilder();
         }
 
