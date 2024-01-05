@@ -2,7 +2,7 @@ package com.sckill.sckill.service;
 
 import com.sckill.sckill.dto.UserDTO;
 import com.sckill.sckill.entities.User;
-import com.sckill.sckill.exception.IdInvalidoException;
+import com.sckill.sckill.exception.InvalidIdException;
 import com.sckill.sckill.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IdInvalidoException("ID invalid: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new InvalidIdException("ID invalid: " + id));
 
     }
 

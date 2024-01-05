@@ -1,11 +1,8 @@
 package com.sckill.sckill.controller;
 
 import com.sckill.sckill.dto.ItemDTO;
-import com.sckill.sckill.dto.UserDTO;
 import com.sckill.sckill.entities.Item;
-import com.sckill.sckill.entities.User;
 import com.sckill.sckill.service.ItemService;
-import com.sckill.sckill.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -33,24 +30,24 @@ public class ItemController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
-        List<User> users = itemService.toListUser();
-        List<UserDTO> userDTOList = users.stream()
-                .map(user -> modelMapper.map(user, UserDTO.class))
+        List<Item> itens = itemService.toListUser();
+        List<ItemDTO> userDTOList = itens.stream()
+                .map(item -> modelMapper.map(item, ItemDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(userDTOList);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody final UserDTO dto) {
-        User user = itemService.save(dto);
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+    public ResponseEntity<?> save(@RequestBody final ItemDTO dto) {
+        Item item = itemService.save(dto);
+        ItemDTO itemDTO= modelMapper.map(item, ItemDTO.class);
 
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(itemDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) throws Exception {
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         itemService.delete(id);
 
         return ResponseEntity.ok().build();
