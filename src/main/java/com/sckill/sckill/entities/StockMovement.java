@@ -22,10 +22,10 @@ public class StockMovement {
     @Column(name = "ID")
     Long id;
 
-    @Column
+    @Column(name = "CREATION_DATE")
     LocalDateTime creationDate;
 
-    @Column
+    @Column(name = "QUANTITY")
     int quantity;
 
     @OneToOne
