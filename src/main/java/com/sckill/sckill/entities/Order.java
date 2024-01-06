@@ -1,20 +1,21 @@
 package com.sckill.sckill.entities;
 
+import com.sckill.sckill.entities.enums.OrderSituation;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Data
+@ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
 @Table(name = "ORDERS")
 public class Order {
 
@@ -29,8 +30,11 @@ public class Order {
     @OneToMany(mappedBy = "order")
     List<StockMovement> stockMovements;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     User user;
 
+    @Column(name = "SITUATION", nullable = false)
+    @Enumerated(EnumType.STRING)
+    OrderSituation situation;
 
 }

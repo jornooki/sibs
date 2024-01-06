@@ -1,5 +1,7 @@
 package com.sckill.sckill.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,6 +13,11 @@ import lombok.experimental.FieldDefaults;
 public class UserDTO {
 
     Long id;
-    String name;
+
+    @Email(message = "Invalid E-mail")
+    @NotBlank(message = "Email is mandatory")
     String email;
+
+    @NotBlank(message = "Name is mandatory")
+    String name;
 }
