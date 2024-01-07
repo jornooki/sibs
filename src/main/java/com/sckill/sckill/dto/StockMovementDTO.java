@@ -14,4 +14,5 @@ public class StockMovementDTO {
 
     LocalDateTime creationDate;
     int quantity;
+    Long orderId;
 }
