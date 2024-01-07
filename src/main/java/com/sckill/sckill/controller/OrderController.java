@@ -21,13 +21,13 @@ public class OrderController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;
 
-//    @GetMapping("/findById/{id}")
-//    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-//        Order order = orderService.findById(id);
-//        ItemDTO itemDTO = modelMapper.map(item, ItemDTO.class);
-//
-//        return ResponseEntity.ok(itemDTO);
-//    }
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        Order order = orderService.findById(id);
+        OrderDTO itemDTO = modelMapper.map(order, OrderDTO.class);
+
+        return ResponseEntity.ok(itemDTO);
+    }
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {

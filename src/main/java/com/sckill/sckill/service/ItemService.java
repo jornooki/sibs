@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -27,7 +28,7 @@ public class ItemService {
     }
 
     public Item save(ItemDTO dto) {
-        if(dto.getQuantity() < 0) {
+        if (dto.getQuantity() < 0) {
             throw new BussinesException("Invalid value for value " + dto.getQuantity());
         }
         Item user = loadItem(dto);
@@ -37,11 +38,9 @@ public class ItemService {
     private Item loadItem(ItemDTO dto) {
         Item.ItemBuilder<?, ?> builder;
         if (dto.getId() == null) {
-            builder = Item.builder()
-                    .name(dto.getName());
+            builder = Item.builder().name(dto.getName());
         } else {
-            Item item = itemRepository.findById(dto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Item not found with ID " + dto.getId()));
+            Item item = findById(dto.getId());
             builder = item.toBuilder();
         }
 

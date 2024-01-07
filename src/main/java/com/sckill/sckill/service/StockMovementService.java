@@ -27,7 +27,8 @@ import java.util.Optional;
 public class StockMovementService {
 
     private final StockMovementRepository stockMovementRepository;
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
+    private final ItemService itemService;
     private final ItemRepository itemRepository;
 
     public StockMovement findById(Long id) {
@@ -40,18 +41,29 @@ public class StockMovementService {
 
     public StockMovement save(StockMovementDTO dto) {
 
-        Order order = orderRepository.findById(dto.getOrderId()).orElseThrow(() -> new BussinesException("Order not found"));
-        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(() -> new BussinesException("Item not found"));
+        Order order = orderService.findById(dto.getOrderId());
+        Item item = itemService.findById(dto.getItemId());
 
         if (order.getSituation().equals(OrderSituation.CLOSED)) {
             throw new BussinesException("Order is already closed");
         }
+
+        updateStock(dto, item);
 
         StockMovement stockMovement = loadStockMovement(dto);
         stockMovement.setOrder(order);
         stockMovement.setItem(item);
 
         return stockMovementRepository.saveAndFlush(stockMovement);
+    }
+
+    private void updateStock(StockMovementDTO dto, Item item) {
+        if (dto.getQuantity() > item.getQuantity()) {
+            throw new BussinesException("insufficient quantity in stock");
+        } else {
+            item.setQuantity(item.getQuantity() - dto.getQuantity());
+            itemRepository.saveAndFlush(item);
+        }
     }
 
     private StockMovement loadStockMovement(StockMovementDTO dto) {
@@ -61,8 +73,7 @@ public class StockMovementService {
                     .creationDate(LocalDateTime.now())
                     .quantity(dto.getQuantity());
         } else {
-            StockMovement stockMovement = stockMovementRepository.findById(dto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Stock movement not found with ID " + dto.getId()));
+            StockMovement stockMovement = findById(dto.getId());
             builder = stockMovement.toBuilder();
         }
 
