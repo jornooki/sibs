@@ -5,8 +5,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Properties;
-
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -14,8 +12,6 @@ public class EmailService {
     private final JavaMailSender emailSender;
 
     public void sendEmail(String to, String order) {
-        Properties properties = System.getProperties();
-
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
