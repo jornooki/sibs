@@ -2,6 +2,7 @@ package com.sckill.sckill.service;
 
 import com.sckill.sckill.dto.ItemDTO;
 import com.sckill.sckill.entities.Item;
+import com.sckill.sckill.exception.BussinesException;
 import com.sckill.sckill.exception.InvalidIdException;
 import com.sckill.sckill.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +27,9 @@ public class ItemService {
     }
 
     public Item save(ItemDTO dto) {
+        if(dto.getQuantity() < 0) {
+            throw new BussinesException("Invalid value for value " + dto.getQuantity());
+        }
         Item user = loadItem(dto);
         return itemRepository.saveAndFlush(user);
     }
@@ -41,7 +45,7 @@ public class ItemService {
             builder = item.toBuilder();
         }
 
-        return builder.name(dto.getName()).build();
+        return builder.name(dto.getName()).quantity(dto.getQuantity()).build();
     }
 
     public void delete(Long id) {

@@ -1,5 +1,6 @@
 package com.sckill.sckill.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,5 +12,10 @@ import lombok.experimental.FieldDefaults;
 public class ItemDTO {
 
     Long id;
+    
+    @NotNull(message = "Name is mandatory")
     String name;
+
+    @NotNull(message = "Quantity is mandatory")
+    Long quantity;
 }

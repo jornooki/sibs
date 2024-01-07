@@ -23,4 +23,7 @@ public class Item {
 
     @Column(name = "NAME")
     String name;
+
+    @Column(name = "QUANTITY", nullable = false)
+    Long quantity;
 }

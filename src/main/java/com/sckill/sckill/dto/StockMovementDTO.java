@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StockMovementDTO {
 
+    Long id;
     LocalDateTime creationDate;
     int quantity;
     Long orderId;
+    Long itemId;
 }
