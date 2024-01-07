@@ -1,25 +1,20 @@
 package com.sckill.sckill.service;
 
-import com.sckill.sckill.dto.ItemDTO;
 import com.sckill.sckill.dto.StockMovementDTO;
 import com.sckill.sckill.entities.Item;
 import com.sckill.sckill.entities.Order;
 import com.sckill.sckill.entities.StockMovement;
-import com.sckill.sckill.entities.enums.OrderSituation;
-import com.sckill.sckill.exception.BussinesException;
+import com.sckill.sckill.entities.enums.OrderStatus;
+import com.sckill.sckill.exception.BusinessException;
 import com.sckill.sckill.exception.InvalidIdException;
 import com.sckill.sckill.repository.ItemRepository;
-import com.sckill.sckill.repository.OrderRepository;
 import com.sckill.sckill.repository.StockMovementRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +24,12 @@ public class StockMovementService {
     private final StockMovementRepository stockMovementRepository;
     private final OrderService orderService;
     private final ItemService itemService;
-    private final ItemRepository itemRepository;
 
     public StockMovement findById(Long id) {
-        return stockMovementRepository.findById(id).orElseThrow(() -> new InvalidIdException("ID invalid: " + id));
+        return stockMovementRepository.findById(id).orElseThrow(() -> new InvalidIdException("ID Invalid: " + id));
     }
 
-    public List<StockMovement> toListStockMovements() {
+    public List<StockMovement> findAll() {
         return stockMovementRepository.findAll();
     }
 
@@ -44,8 +38,8 @@ public class StockMovementService {
         Order order = orderService.findById(dto.getOrderId());
         Item item = itemService.findById(dto.getItemId());
 
-        if (order.getSituation().equals(OrderSituation.CLOSED)) {
-            throw new BussinesException("Order is already closed");
+        if (order.getStatus().equals(OrderStatus.CLOSED)) {
+            throw new BusinessException("Order is already closed");
         }
 
         updateStock(dto, item);
@@ -59,19 +53,17 @@ public class StockMovementService {
 
     private void updateStock(StockMovementDTO dto, Item item) {
         if (dto.getQuantity() > item.getQuantity()) {
-            throw new BussinesException("insufficient quantity in stock");
+            throw new BusinessException("insufficient quantity in stock");
         } else {
             item.setQuantity(item.getQuantity() - dto.getQuantity());
-            itemRepository.saveAndFlush(item);
+            itemService.save(item);
         }
     }
 
     private StockMovement loadStockMovement(StockMovementDTO dto) {
-        StockMovement.StockMovementBuilder<?, ?> builder;
+        StockMovement.StockMovementBuilder builder;
         if (dto.getId() == null) {
-            builder = StockMovement.builder()
-                    .creationDate(LocalDateTime.now())
-                    .quantity(dto.getQuantity());
+            builder = StockMovement.builder();
         } else {
             StockMovement stockMovement = findById(dto.getId());
             builder = stockMovement.toBuilder();
@@ -85,7 +77,7 @@ public class StockMovementService {
     }
 
     public List<StockMovement> toListStockMovementsByOrder(Long orderId) {
-        return stockMovementRepository.findByOrder_Id(orderId);
+        return stockMovementRepository.findByOrderId(orderId);
 
     }
 }

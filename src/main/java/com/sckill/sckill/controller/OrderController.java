@@ -31,9 +31,9 @@ public class OrderController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
-        List<Order> ordens = orderService.toListOrder();
-        List<OrderDTO> userDTOList = ordens.stream()
-                .map(item -> modelMapper.map(item, OrderDTO.class))
+        List<Order> orders = orderService.findAll();
+        List<OrderDTO> userDTOList = orders.stream()
+                .map(order -> modelMapper.map(order, OrderDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(userDTOList);
@@ -42,14 +42,14 @@ public class OrderController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody final OrderDTO dto) {
         Order order = orderService.save(dto);
-        OrderDTO orderDTO= modelMapper.map(order, OrderDTO.class);
+        OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
 
         return ResponseEntity.ok(orderDTO);
     }
 
     @PostMapping("/close")
-    public ResponseEntity<?> save(@RequestBody final IdDto dto) {
-        Order order = orderService.toClose(dto);
+    public ResponseEntity<?> close(@RequestBody final IdDto dto) {
+        Order order = orderService.complete(dto);
         OrderDTO orderDTO= modelMapper.map(order, OrderDTO.class);
 
         return ResponseEntity.ok(orderDTO);

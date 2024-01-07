@@ -25,16 +25,14 @@ public class UserService {
 
     public User save(UserDTO dto) {
         User user = loadUser(dto);
-        return userRepository.saveAndFlush(user);
+        return userRepository.save(user);
     }
 
     private User loadUser(UserDTO dto) {
 
-        User.UserBuilder<?, ?> builder;
+        User.UserBuilder builder;
         if (dto.getId() == null) {
-            builder = User.builder()
-                    .name(dto.getName())
-                    .email(dto.getEmail());
+            builder = User.builder();
         } else {
             User user = userRepository.findById(dto.getId())
                     .orElseThrow(() -> new EntityNotFoundException("User not found with ID " + dto.getId()));
@@ -46,15 +44,11 @@ public class UserService {
                 .email(dto.getEmail()).build();
     }
 
-    public List<User> toListUser() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public void delete(Long id) throws Exception {
-        try {
-            userRepository.deleteById(id);
-        } catch (Exception e ) {
-            throw new Exception("User not found");
-        }
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }

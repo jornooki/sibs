@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IdDto {
 
-    @NotNull(message = "O ID é obrigatório")
+    @NotNull(message = "ID is mandatory")
     Long id;
 }

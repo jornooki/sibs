@@ -3,13 +3,10 @@ package com.sckill.sckill.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-
-@ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
 @Data
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -28,7 +25,7 @@ public class StockMovement {
     @Column(name = "QUANTITY")
     int quantity;
 
-    @OneToOne
+    @ManyToOne
     Item item;
 
     @ManyToOne

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum OrderSituation {
+public enum OrderStatus {
 
     OPEN("Open"),
     CLOSED("Closed");

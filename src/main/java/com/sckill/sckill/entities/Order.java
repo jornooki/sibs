@@ -1,6 +1,6 @@
 package com.sckill.sckill.entities;
 
-import com.sckill.sckill.entities.enums.OrderSituation;
+import com.sckill.sckill.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -33,8 +32,8 @@ public class Order {
     @ManyToOne(optional = false)
     User user;
 
-    @Column(name = "SITUATION", nullable = false)
+    @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
-    OrderSituation situation;
+    OrderStatus status;
 
 }

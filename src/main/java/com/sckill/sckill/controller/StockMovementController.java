@@ -30,13 +30,14 @@ public class StockMovementController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
-        List<StockMovement> stockMovements = stockMovementService.toListStockMovements();
+        List<StockMovement> stockMovements = stockMovementService.findAll();
         List<StockMovementDTO> userDTOList = stockMovements.stream()
                 .map(stockMovement -> modelMapper.map(stockMovement, StockMovementDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(userDTOList);
     }
+
     @GetMapping("/findByOrder/{orderId}")
     public ResponseEntity<?> findByOrder(@PathVariable("orderId") Long orderId) {
         List<StockMovement> stockMovements = stockMovementService.toListStockMovementsByOrder(orderId);
@@ -50,9 +51,9 @@ public class StockMovementController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody final StockMovementDTO dto) {
         StockMovement stockMovement = stockMovementService.save(dto);
-        ItemDTO itemDTO = modelMapper.map(stockMovement, ItemDTO.class);
+        StockMovementDTO StockMovementDTO = modelMapper.map(stockMovement, StockMovementDTO.class);
 
-        return ResponseEntity.ok(itemDTO);
+        return ResponseEntity.ok(StockMovementDTO);
     }
 
     @DeleteMapping("/delete/{id}")

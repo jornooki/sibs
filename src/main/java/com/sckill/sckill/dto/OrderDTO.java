@@ -1,6 +1,6 @@
 package com.sckill.sckill.dto;
 
-import com.sckill.sckill.entities.enums.OrderSituation;
+import com.sckill.sckill.entities.enums.OrderStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +16,5 @@ public class OrderDTO {
     Long id;
     Long userId;
     LocalDateTime creationDate;
-    OrderSituation situation;
+    OrderStatus status;
 }

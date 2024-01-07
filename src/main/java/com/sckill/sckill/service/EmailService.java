@@ -4,20 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Properties;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class EmailService {
 
     private final JavaMailSender emailSender;
 
     public void sendEmail(String to, String order) {
+        Properties properties = System.getProperties();
+
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
-        message.setSubject("Order Aproved");
-        message.setText(order + " Order Aproved");
+        message.setSubject("Order Approved");
+        message.setText(order + " Order Approved");
 
 
         emailSender.send(message);

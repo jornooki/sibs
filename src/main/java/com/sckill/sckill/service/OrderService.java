@@ -4,8 +4,8 @@ import com.sckill.sckill.dto.IdDto;
 import com.sckill.sckill.dto.OrderDTO;
 import com.sckill.sckill.entities.Order;
 import com.sckill.sckill.entities.User;
-import com.sckill.sckill.entities.enums.OrderSituation;
-import com.sckill.sckill.exception.BussinesException;
+import com.sckill.sckill.entities.enums.OrderStatus;
+import com.sckill.sckill.exception.BusinessException;
 import com.sckill.sckill.repository.OrderRepository;
 import com.sckill.sckill.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,7 +28,7 @@ public class OrderService {
     public Order findById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order not found with ID " + id));
     }
-    public List<Order> toListOrder() {
+    public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
@@ -46,28 +46,28 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    public Order toClose(IdDto dto) {
+    public Order complete(IdDto dto) {
         Order order = findById(dto.getId());
-        order.setSituation(OrderSituation.CLOSED);
+        order.setStatus(OrderStatus.CLOSED);
         emailService.sendEmail(order.getUser().getEmail(), order.getId().toString());
         return orderRepository.saveAndFlush(order);
     }
 
     private Order loadOrder(OrderDTO dto) {
 
-            Order.OrderBuilder<?, ?> builder;
+            Order.OrderBuilder builder;
             if (dto.getId() == null) {
                 builder = Order.builder();
             } else {
-                Order order =findById(dto.getId());
+                Order order = findById(dto.getId());
                 builder = order.toBuilder();
             }
 
-            return builder.situation(OrderSituation.OPEN).creationDate(LocalDateTime.now()).build();
+            return builder.status(OrderStatus.OPEN).creationDate(LocalDateTime.now()).build();
         }
 
     private User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new BussinesException("User not found with ID" + id));
+        return userRepository.findById(id).orElseThrow(() -> new BusinessException("User not found with ID" + id));
     }
 
 }

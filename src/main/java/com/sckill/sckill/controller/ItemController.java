@@ -30,8 +30,8 @@ public class ItemController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
-        List<Item> itens = itemService.toListUser();
-        List<ItemDTO> userDTOList = itens.stream()
+        List<Item> items = itemService.findAll();
+        List<ItemDTO> userDTOList = items.stream()
                 .map(item -> modelMapper.map(item, ItemDTO.class))
                 .collect(Collectors.toList());
 

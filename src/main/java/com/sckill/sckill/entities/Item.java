@@ -7,13 +7,12 @@ import lombok.experimental.SuperBuilder;
 
 
 @Data
-@ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "ITENS")
+@Table(name = "ITEMS")
 public class Item {
 
     @Id
@@ -21,7 +20,7 @@ public class Item {
     @Column(name = "ID")
     Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     String name;
 
     @Column(name = "QUANTITY", nullable = false)

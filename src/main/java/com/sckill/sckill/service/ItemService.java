@@ -2,10 +2,9 @@ package com.sckill.sckill.service;
 
 import com.sckill.sckill.dto.ItemDTO;
 import com.sckill.sckill.entities.Item;
-import com.sckill.sckill.exception.BussinesException;
+import com.sckill.sckill.exception.BusinessException;
 import com.sckill.sckill.exception.InvalidIdException;
 import com.sckill.sckill.repository.ItemRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,22 +22,22 @@ public class ItemService {
         return itemRepository.findById(id).orElseThrow(() -> new InvalidIdException("invalid ID: " + id));
     }
 
-    public List<Item> toListUser() {
+    public List<Item> findAll() {
         return itemRepository.findAll();
     }
 
     public Item save(ItemDTO dto) {
         if (dto.getQuantity() < 0) {
-            throw new BussinesException("Invalid value for value " + dto.getQuantity());
+            throw new BusinessException("Invalid value for value " + dto.getQuantity());
         }
         Item user = loadItem(dto);
         return itemRepository.saveAndFlush(user);
     }
 
     private Item loadItem(ItemDTO dto) {
-        Item.ItemBuilder<?, ?> builder;
+        Item.ItemBuilder builder;
         if (dto.getId() == null) {
-            builder = Item.builder().name(dto.getName());
+            builder = Item.builder();
         } else {
             Item item = findById(dto.getId());
             builder = item.toBuilder();
@@ -49,5 +48,9 @@ public class ItemService {
 
     public void delete(Long id) {
         itemRepository.deleteById(id);
+    }
+
+    public void save(Item item) {
+        itemRepository.save(item);
     }
 }
