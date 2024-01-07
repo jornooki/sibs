@@ -2,14 +2,18 @@ package com.sckill.sckill.service;
 
 import com.sckill.sckill.dto.ItemDTO;
 import com.sckill.sckill.dto.StockMovementDTO;
+import com.sckill.sckill.entities.Order;
 import com.sckill.sckill.entities.StockMovement;
 import com.sckill.sckill.exception.InvalidIdException;
+import com.sckill.sckill.repository.OrderRepository;
 import com.sckill.sckill.repository.StockMovementRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ import java.util.List;
 public class StockMovementService {
 
     private final StockMovementRepository stockMovementRepository;
+    private final OrderRepository orderRepository;
     public StockMovement findById(Long id) {
         return stockMovementRepository.findById(id).orElseThrow(() -> new InvalidIdException("ID invalid: " + id));
     }
@@ -34,7 +39,7 @@ public class StockMovementService {
     }
 
     public List<StockMovement> toListStockMovementsByOrder(Long orderId) {
-        return stockMovementRepository.findByOrder(orderId);
+        return stockMovementRepository.findByOrder_Id(orderId);
 
     }
 }

@@ -1,8 +1,7 @@
 package com.sckill.sckill.controller;
 
-import com.sckill.sckill.dto.ItemDTO;
+import com.sckill.sckill.dto.IdDto;
 import com.sckill.sckill.dto.OrderDTO;
-import com.sckill.sckill.entities.Item;
 import com.sckill.sckill.entities.Order;
 import com.sckill.sckill.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +42,14 @@ public class OrderController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody final OrderDTO dto) {
         Order order = orderService.save(dto);
+        OrderDTO orderDTO= modelMapper.map(order, OrderDTO.class);
+
+        return ResponseEntity.ok(orderDTO);
+    }
+
+    @PostMapping("/close")
+    public ResponseEntity<?> save(@RequestBody final IdDto dto) {
+        Order order = orderService.toClose(dto);
         OrderDTO orderDTO= modelMapper.map(order, OrderDTO.class);
 
         return ResponseEntity.ok(orderDTO);

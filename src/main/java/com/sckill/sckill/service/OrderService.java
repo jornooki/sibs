@@ -1,5 +1,6 @@
 package com.sckill.sckill.service;
 
+import com.sckill.sckill.dto.IdDto;
 import com.sckill.sckill.dto.OrderDTO;
 import com.sckill.sckill.entities.Order;
 import com.sckill.sckill.entities.User;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +60,11 @@ public class OrderService {
 
     public void delete(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    public Order toClose(IdDto dto) {
+        Order order = orderRepository.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("User not found with ID " + dto.getId()));
+        order.setSituation(OrderSituation.CLOSED);
+        return orderRepository.saveAndFlush(order);
     }
 }
