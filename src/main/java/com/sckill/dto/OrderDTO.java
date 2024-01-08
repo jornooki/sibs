@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,4 +18,5 @@ public class OrderDTO {
     UserDTO user;
     LocalDateTime creationDate;
     OrderStatus status;
+    List<StockMovementDTO> stockMovements;
 }
