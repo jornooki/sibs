@@ -9,6 +9,7 @@ import com.sckill.exception.InvalidIdException;
 import com.sckill.dto.StockMovementDTO;
 import com.sckill.repository.StockMovementRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class StockMovementService {
 
     private final StockMovementRepository stockMovementRepository;
@@ -38,6 +40,7 @@ public class StockMovementService {
         Item item = itemService.findById(dto.getItemId());
 
         if (order.getStatus().equals(OrderStatus.CLOSED)) {
+            log.error("Order" + order.getId() + " is already closed");
             throw new BusinessException("Order is already closed");
         }
 
@@ -47,7 +50,7 @@ public class StockMovementService {
         stockMovement.setOrder(order);
         stockMovement.setItem(item);
 
-        return stockMovementRepository.saveAndFlush(stockMovement);
+        return stockMovementRepository.save(stockMovement);
     }
 
     private void updateStock(StockMovementDTO dto, Item item) {

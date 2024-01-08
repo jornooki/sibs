@@ -1,6 +1,7 @@
 package com.sckill.controller;
 
 import com.sckill.dto.OrderDTO;
+import com.sckill.dto.SendOrderDto;
 import com.sckill.entities.Order;
 import com.sckill.dto.IdDto;
 import com.sckill.service.OrderService;
@@ -40,7 +41,7 @@ public class OrderController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody final OrderDTO dto) {
+    public ResponseEntity<?> save(@RequestBody final SendOrderDto dto) {
         Order order = orderService.save(dto);
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
 

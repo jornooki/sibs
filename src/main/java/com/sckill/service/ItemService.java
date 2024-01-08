@@ -6,6 +6,7 @@ import com.sckill.dto.ItemDTO;
 import com.sckill.exception.InvalidIdException;
 import com.sckill.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -28,10 +30,11 @@ public class ItemService {
 
     public Item save(ItemDTO dto) {
         if (dto.getQuantity() < 0) {
+            log.error("Invalid value for value " + dto.getQuantity());
             throw new BusinessException("Invalid value for value " + dto.getQuantity());
         }
         Item user = loadItem(dto);
-        return itemRepository.saveAndFlush(user);
+        return itemRepository.save(user);
     }
 
     private Item loadItem(ItemDTO dto) {

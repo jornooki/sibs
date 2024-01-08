@@ -1,6 +1,6 @@
 package com.sckill.service;
 
-import com.sckill.dto.OrderDTO;
+import com.sckill.dto.SendOrderDto;
 import com.sckill.entities.Order;
 import com.sckill.entities.User;
 import com.sckill.entities.enums.OrderStatus;
@@ -10,6 +10,7 @@ import com.sckill.dto.IdDto;
 import com.sckill.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -32,7 +34,7 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Order save(OrderDTO dto) {
+    public Order save(SendOrderDto dto) {
 
         Order order = loadOrder(dto);
         User user = findUserById(dto.getUserId());
@@ -49,11 +51,12 @@ public class OrderService {
     public Order complete(IdDto dto) {
         Order order = findById(dto.getId());
         order.setStatus(OrderStatus.CLOSED);
-        emailService.sendEmail(order.getUser().getEmail(), order.getId().toString());
-        return orderRepository.saveAndFlush(order);
+        //emailService.sendEmail(order.getUser().getEmail(), order.getId().toString());
+        log.info("Order complete");
+        return orderRepository.save(order);
     }
 
-    private Order loadOrder(OrderDTO dto) {
+    private Order loadOrder(SendOrderDto dto) {
 
             Order.OrderBuilder builder;
             if (dto.getId() == null) {
